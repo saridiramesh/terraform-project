@@ -1,48 +1,38 @@
-resource "aws_elb" "bar" {
-  name               = "raham-terraform-elb"
-  availability_zones = ["ap-southeast-1a", "ap-southeast-1b"]
-
-  listener {
-    instance_port     = 80
-    instance_protocol = "http"
-    lb_port           = 80
-    lb_protocol       = "http"
-  }
-
-  health_check {
-    healthy_threshold   = 3
-    unhealthy_threshold = 5
-    timeout             = 5
-    target              = "HTTP:80/"
-    interval            = 30
-  }
-
-  instances                 = ["${aws_instance.one.id}", "${aws_instance.two.id}"]
-  cross_zone_load_balancing = true
-  idle_timeout              = 400
-  tags = {
-    Name = "raham-tf-elb"
-  }
+resource "aws_db_instance" "nine" {
+  allocated_storage           = 10
+  db_name                     = "mydb"
+  engine                      = "mysql"
+  engine_version              = "5.7"
+  instance_class              = "db.t3.micro"
+  manage_master_user_password = true
+  username                    = "ramesh"
+  parameter_group_name        = "default.mysql5.7"
 }
 
- /*resource "aws_rds_cluster" "default" {
-  cluster_identifier      = "aurora-cluster-demo"
-  engine                  = "aurora-mysql"
-  engine_version          = "5.7.mysql_aurora.2.11.2"
-  availability_zones      = ["ap-southeast-1a", "ap-southeast-1b"]
-  database_name           = "mydb"
-  master_username         = "raham"
-  master_password         = "Rahamshaik#444555"
-  backup_retention_period = 5
-  preferred_backup_window = "07:00-09:00"
-}*/
+resource "aws_elb" "ten" {
+    name = "terraform-loadbalancer"
+    availability_zones = ["us-east-1a", "us-east-1b"]
 
-/*resource "aws_instance" "one" {
-  for_each = toset(["one", "two", "three"])
-  ami           = "ami-006be9ab6a140de6e"
-  instance_type = "t2.micro"
-  tags = {
-    Name = "instance-${each.key}"
-  }
+    listener {
+        instance_port     = 80
+        instance_protocol = "http"
+        lb_port           = 80
+        lb_protocol       = "http"
+    }
+
+    health_check {
+        healthy_threshold   = 3
+        unhealthy_threshold = 5
+        timeout             = 5
+        target              = "http:80/"
+        interval            = 30
+    }
+
+    instances                 = ["${aws_instance.one.id}", "${aws_instance.two.id}"]
+    cross_zone_load_balancing = true
+    idle_timeout              = 400
+
+    tags = {
+        Name = "terraform-lb"
+    }
 }
-*/
